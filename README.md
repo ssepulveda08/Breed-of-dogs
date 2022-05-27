@@ -5,8 +5,8 @@ git clone https://github.com/ssepulveda08/Breed-of-dogs.git
 ```
 
 ## Captura de pantalla 📱
-![Home](https://github.com/ssepulveda08/Breed-of-dogs/main/Home.jpg)
-![Home](https://github.com/ssepulveda08/Breed-of-dogs/main/Home1.jpg)
+![Home](https://github.com/ssepulveda08/Breed-of-dogs/blob/main/Home.png)
+![Home](https://github.com/ssepulveda08/Breed-of-dogs/blob/main/Home1.png)
 
 ## Expresiones de Gratitud 🎁
 * Comenta a otros sobre este proyecto 📢
