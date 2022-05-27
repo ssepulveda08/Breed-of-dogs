@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalPagerApi::class)
 
-package com.example.breedofdogs
+package com.example.breedofdogs.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BreedOfDogsTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().background(Black),
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     ToolBarContainer(mainViewModel)
