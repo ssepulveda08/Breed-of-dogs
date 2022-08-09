@@ -2,23 +2,28 @@ package com.example.breedofdogs.repositories
 
 import com.example.breedofdogs.data.RemoteDataSource
 import com.example.breedofdogs.newwork.BaseApiResponse
-import com.example.breedofdogs.newwork.models.DogResponse
+import com.example.breedofdogs.newwork.models.BreedCat
+import com.example.breedofdogs.newwork.models.CatImage
 import com.example.breedofdogs.newwork.models.NetworkResult
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-@ActivityRetainedScoped
-class DogRepository @Inject constructor(
+class CatRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : BaseApiResponse() {
 
-    suspend fun getDogsByBreed(breed: String): Flow<NetworkResult<DogResponse>> {
+    suspend fun getBreedsCat() : Flow<NetworkResult<List<BreedCat>>> {
         return flow {
-            emit(safeApiCall { remoteDataSource.getDogsByBreed(breed) })
+            emit(safeApiCall { remoteDataSource.getBreadsCat() })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getImagesCatByBreed(breed: String) : Flow<NetworkResult<List<CatImage>>> {
+        return flow {
+            emit(safeApiCall { remoteDataSource.getImagesCatByBreed(breed) })
         }.flowOn(Dispatchers.IO)
     }
 }

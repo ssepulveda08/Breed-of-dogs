@@ -1,5 +1,6 @@
 package com.example.breedofdogs.di
 
+import com.example.breedofdogs.newwork.service.CatService
 import com.example.breedofdogs.newwork.service.DogService
 import dagger.Module
 import dagger.Provides
@@ -17,8 +18,13 @@ object NetWordModule {
 
     @Singleton
     @Provides
-    @BasePath
-    fun provideBaseUrl(): String = "https://dog.ceo/"
+    @DogsPath
+    fun provideDogsBaseUrl(): String = "https://dog.ceo/"
+
+    @Singleton
+    @Provides
+    @CatsPath
+    fun provideCatsBaseUrl(): String = "https://api.thecatapi.com/v1/"
 
     @Singleton
     @Provides
@@ -37,10 +43,11 @@ object NetWordModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(
+    @DogsService
+    fun provideDogsRetrofit(
         okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory,
-        @BasePath baseUrl: String
+        @DogsPath baseUrl: String
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
@@ -51,7 +58,27 @@ object NetWordModule {
 
     @Singleton
     @Provides
-    fun provideDogService(retrofit: Retrofit): DogService =
+    @CatsService
+    fun provideCatsRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory,
+        @CatsPath baseUrl: String
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDogService(@DogsService retrofit: Retrofit): DogService =
         retrofit.create(DogService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCatService(@CatsService retrofit: Retrofit): CatService =
+        retrofit.create(CatService::class.java)
 
 }

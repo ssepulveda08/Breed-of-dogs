@@ -1,46 +1,59 @@
 package com.example.breedofdogs.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.breedofdogs.repositories.DogRepository
-import com.example.breedofdogs.ui.BREEDS
+import com.example.breedofdogs.newwork.models.BreedCat
+import com.example.breedofdogs.repositories.CatRepository
 import com.example.breedofdogs.ui.models.Queries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val repository: DogRepository,
+class CatViewModel @Inject constructor(
+    private val repository: CatRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
     var cacheQueries by mutableStateOf<List<Queries>>(listOf())
 
+    var breeds by mutableStateOf<List<BreedCat>>(listOf())
+
     init {
-        fetchDogsByBreed(BREEDS[0])
+        getBreedsCat()
+    }
+
+    private fun getBreedsCat() = viewModelScope.launch {
+        if (breeds.isEmpty()) {
+            repository.getBreedsCat().collect { values ->
+                values.data?.let {
+                    breeds = it
+                }
+            }
+        }
     }
 
     fun updateBreeds(breed: String) {
         viewModelScope.launch {
-            fetchDogsByBreed(breed)
+            fetchCatByBreed(breed)
         }
     }
 
-    fun fetchDogsByBreed(breed: String) = viewModelScope.launch {
+    fun fetchCatByBreed(breed: String) = viewModelScope.launch {
         val dataBread = cacheQueries.firstOrNull { it.breed == breed }
         if (dataBread == null) {
-            repository.getDogsByBreed(breed).collect { values ->
+            repository.getImagesCatByBreed(breed).collect { values ->
                 val list: MutableList<Queries> = cacheQueries.toMutableList()
-                values.data?.message?.let {
+                values.data?.let {
                     list.add(
                         Queries(
                             breed,
-                            it
+                            it.map { img -> img.url }
                         )
                     )
                 }
@@ -48,4 +61,5 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
 }
