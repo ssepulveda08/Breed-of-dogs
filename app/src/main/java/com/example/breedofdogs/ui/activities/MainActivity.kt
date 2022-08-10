@@ -1,6 +1,8 @@
 package com.example.breedofdogs.ui.activities
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -37,9 +39,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize().background(Black),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    //catViewModel.getBreedsCat()
                     val navController = rememberNavController()
-                    //ToolBarContainer(mainViewModel)
                     NavHost(navController = navController, startDestination = "HomeSelection") {
                          composable("HomeSelection") { HomeSelectionItem(navController) }
                          composable("Dogs") { DogsContainer(mainViewModel, navController) }
@@ -47,6 +47,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun configSyster() {
+        if (Build.VERSION.SDK_INT < 16) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
     }
 }

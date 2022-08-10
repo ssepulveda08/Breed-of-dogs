@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,11 +32,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.breedofdogs.ui.theme.Black
-import com.example.breedofdogs.ui.theme.BreedOfDogsTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
-import java.util.*
+import java.util.Locale
 
 @ExperimentalMaterial3Api
 @Composable
@@ -49,7 +49,8 @@ fun DefaultToolBarView(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Black),
+                    .background(Black)
+                    .padding(top = 12.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = { navController?.popBackStack() }) {
@@ -78,25 +79,30 @@ fun TabBreeds(
     tabIndex: Int,
     content: @Composable () -> Unit
 ) {
-    BreedOfDogsTheme {
-        ScrollableTabRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp),
-            selectedTabIndex = tabIndex,
-            edgePadding = 4.dp,
-            containerColor = Black,
-            indicator = { tabPositions ->
-                Box(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[tabIndex])
-                        .fillMaxSize()
-                        .background(Color.White.copy(alpha = 0.1f))
-                )
-            }
-        ) {
-            content.invoke()
-        }
+    ScrollableTabRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp),
+        selectedTabIndex = tabIndex,
+        edgePadding = 4.dp,
+        containerColor = Black,
+        indicator = { tabPositions ->
+            Box(
+                Modifier
+                    .tabIndicatorOffset(tabPositions[tabIndex])
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.1f))
+            )
+            Divider(
+                modifier = Modifier
+                    .tabIndicatorOffset(tabPositions[tabIndex])
+                    .padding(start = 8.dp, end = 8.dp),
+                color = Color.Yellow
+            )
+        },
+        divider = {}
+    ) {
+        content.invoke()
     }
 }
 
