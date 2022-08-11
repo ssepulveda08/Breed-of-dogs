@@ -5,6 +5,8 @@ import com.example.breedofdogs.newwork.BaseApiResponse
 import com.example.breedofdogs.newwork.models.BreedCat
 import com.example.breedofdogs.newwork.models.CatImage
 import com.example.breedofdogs.newwork.models.NetworkResult
+import com.example.favorites.dataSource.FavoriteLocalDataSource
+import com.example.favorites.dataSource.LocaleDataSource
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +14,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class CatRepository @Inject constructor(
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val dataSource: LocaleDataSource,
 ) : BaseApiResponse() {
 
     suspend fun getBreedsCat() : Flow<NetworkResult<List<BreedCat>>> {
