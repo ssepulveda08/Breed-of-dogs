@@ -6,6 +6,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,8 +27,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun DogsContainer(mainViewModel: MainViewModel = viewModel(), navController: NavHostController? = null) {
-    DefaultToolBarView("Dogs breeds", navController)  {
+fun DogsContainer(
+    mainViewModel: MainViewModel = viewModel(),
+    navController: NavHostController? = null
+) {
+    val countFavorites: State<Int> = mainViewModel.onCountFavorite.observeAsState(0)
+    DefaultToolBarView("Dogs breeds", navController, countFavorites) {
         CombinedTab(mainViewModel)
     }
 }
@@ -75,7 +82,9 @@ private fun PageDogsByBreed(
         }
         if (list != null) {
             items(list.dogsImages) {
-                DefaultImageView(it)
+                DefaultImageView(it) {
+                    mainViewModel.addFavoriteCat(it, BREEDS[index])
+                }
             }
         } else {
             mainViewModel.updateBreeds(BREEDS[index])

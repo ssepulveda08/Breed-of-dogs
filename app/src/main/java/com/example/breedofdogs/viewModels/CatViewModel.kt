@@ -70,9 +70,6 @@ class CatViewModel @Inject constructor(
 
     fun addFavoriteCat(img: String, breed: String) {
         viewModelScope.launch {
-            /*withContext(Dispatchers.IO) {
-                Log.d("count favorite Cat", "$count")
-            }*/
             repository.addFavoriteCat(
                 Favorite(
                     id = 0,
