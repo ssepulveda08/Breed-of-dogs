@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,12 +25,15 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.example.breedofdogs.ui.theme.Black
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -42,29 +46,78 @@ import java.util.Locale
 fun DefaultToolBarView(
     title: String,
     navController: NavHostController? = null,
+    countFavorites: State<Int>? = null,
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         topBar = {
-            Row(
+            ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(70.dp)
                     .background(Black)
-                    .padding(top = 12.dp, bottom = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(onClick = { navController?.popBackStack() }) {
+                val (back, titleToolbar, favorites, count) = createRefs()
+                IconButton(
+                    modifier = Modifier.constrainAs(back) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start, 8.dp)
+                    },
+                    onClick = { navController?.popBackStack() }
+                ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = Color.White
                     )
                 }
+
                 Text(
                     text = title,
-                    modifier = Modifier.padding(12.dp),
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .constrainAs(titleToolbar) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(back.end, 12.dp)
+                        },
                     style = MaterialTheme.typography.bodyMedium,
                 )
+                var defaultCount = countFavorites?.value ?: 0
+                Text(
+                    text = if (defaultCount > 99) {
+                        "+99"
+                    } else defaultCount.toString(),
+                    modifier = Modifier
+                        .constrainAs(count) {
+                            top.linkTo(favorites.top)
+                            bottom.linkTo(favorites.bottom)
+                            end.linkTo(favorites.start)
+                        }
+                        .padding(0.dp),
+                    color = Color.White,
+                    textAlign = TextAlign.End,
+                    fontSize = 10.sp,
+                )
+
+                IconButton(
+                    modifier = Modifier
+                        .constrainAs(favorites) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            end.linkTo(parent.end, 16.dp)
+                        }
+                        .padding(0.dp),
+                    onClick = { }
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(0.dp),
+                        imageVector = if (defaultCount > 0) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "favorites",
+                        tint = Color.Red
+                    )
+                }
             }
         }
     ) {

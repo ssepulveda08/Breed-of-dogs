@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize().background(Black),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    //val countFavorites by catViewModel.onCountFavorites.observeAsState()
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "HomeSelection") {
                          composable("HomeSelection") { HomeSelectionItem(navController) }

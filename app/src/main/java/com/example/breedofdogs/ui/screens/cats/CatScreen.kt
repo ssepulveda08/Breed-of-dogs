@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,12 +27,11 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
-
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun CatsContainer(viewModel: CatViewModel = viewModel(), navController: NavHostController? = null) {
-    DefaultToolBarView("Cat breeds", navController) {
+    val countFavorites: State<Int> = viewModel.onCountFavorites.observeAsState(0)
+    DefaultToolBarView("Cat breeds", navController, countFavorites) {
         if (viewModel.breeds.isNotEmpty()) {
             CombinedTab(viewModel)
         }
@@ -76,14 +77,19 @@ private fun PageCatsByBreed(
 ) {
     LazyVerticalGrid(
         modifier = Modifier.padding(0.dp),
-        columns = GridCells.Adaptive(180.dp),
+        columns = GridCells.Adaptive(200.dp),
     ) {
         val list = viewModel.cacheQueries.firstOrNull {
             it.breed == viewModel.breeds[index].id
         }
         if (list != null) {
             items(list.dogsImages) {
-                DefaultImageView(it)
+                DefaultImageView(it){
+                    viewModel.addFavoriteCat(
+                        it,
+                        viewModel.breeds[index].name
+                    )
+                }
             }
         } else {
             val selectId = viewModel.breeds[index].id
@@ -120,8 +126,10 @@ private fun PreviewCatsContainer() {
                 }
             },
             contentPage = {
-                Column(modifier = Modifier.fillMaxSize().background(Color.Black)) {
-                    
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)) {
+
                 }
             }
         )

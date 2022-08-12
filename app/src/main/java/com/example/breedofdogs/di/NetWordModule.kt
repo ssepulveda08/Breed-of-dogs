@@ -2,9 +2,6 @@ package com.example.breedofdogs.di
 
 import com.example.breedofdogs.newwork.service.CatService
 import com.example.breedofdogs.newwork.service.DogService
-import com.example.favorites.dataSource.FavoriteLocalDataSource
-import com.example.favorites.dataSource.LocaleDataSource
-import com.example.favorites.database.FavoriteDb
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -83,11 +80,5 @@ object NetWordModule {
     @Provides
     fun provideCatService(@CatsService retrofit: Retrofit): CatService =
         retrofit.create(CatService::class.java)
-
-    @Provides
-    @Singleton
-    fun newFavoriteLocalDataSource(
-        db: FavoriteDb
-    ): LocaleDataSource = FavoriteLocalDataSource(db.favoriteDao())
 
 }

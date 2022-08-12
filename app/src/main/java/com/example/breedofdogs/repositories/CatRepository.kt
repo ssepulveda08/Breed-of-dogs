@@ -7,6 +7,7 @@ import com.example.breedofdogs.newwork.models.CatImage
 import com.example.breedofdogs.newwork.models.NetworkResult
 import com.example.favorites.dataSource.FavoriteLocalDataSource
 import com.example.favorites.dataSource.LocaleDataSource
+import com.example.favorites.entity.Favorite
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class CatRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val dataSource: LocaleDataSource,
+    private val dataSource: FavoriteLocalDataSource,
 ) : BaseApiResponse() {
 
     suspend fun getBreedsCat() : Flow<NetworkResult<List<BreedCat>>> {
@@ -29,4 +30,13 @@ class CatRepository @Inject constructor(
             emit(safeApiCall { remoteDataSource.getImagesCatByBreed(breed) })
         }.flowOn(Dispatchers.IO)
     }
+
+    fun countFavorite() = dataSource.getCountCats()
+
+    fun getFavorite() = dataSource.getFavoriteCats()
+
+    suspend fun addFavoriteCat(favorite: Favorite) {
+        dataSource.addFavorite(favorite)
+    }
+
 }

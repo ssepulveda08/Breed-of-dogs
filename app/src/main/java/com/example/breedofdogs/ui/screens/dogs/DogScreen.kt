@@ -68,7 +68,7 @@ private fun PageDogsByBreed(
 ) {
     LazyVerticalGrid(
         modifier = Modifier.padding(0.dp),
-        columns = GridCells.Adaptive(180.dp),
+        columns = GridCells.Adaptive(200.dp),
     ) {
         val list = mainViewModel.cacheQueries.firstOrNull {
             it.breed == BREEDS[index]

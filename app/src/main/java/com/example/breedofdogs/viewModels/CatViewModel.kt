@@ -6,13 +6,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.breedofdogs.newwork.models.BreedCat
 import com.example.breedofdogs.repositories.CatRepository
 import com.example.breedofdogs.ui.models.Queries
+import com.example.favorites.dao.TYPE_CAT
+import com.example.favorites.entity.Favorite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class CatViewModel @Inject constructor(
@@ -61,5 +67,23 @@ class CatViewModel @Inject constructor(
             }
         }
     }
+
+    fun addFavoriteCat(img: String, breed: String) {
+        viewModelScope.launch {
+            /*withContext(Dispatchers.IO) {
+                Log.d("count favorite Cat", "$count")
+            }*/
+            repository.addFavoriteCat(
+                Favorite(
+                    id = 0,
+                    url = img,
+                    type = TYPE_CAT,
+                    breed = breed
+                )
+            )
+        }
+    }
+
+    val onCountFavorites: LiveData<Int> = repository.countFavorite()
 
 }

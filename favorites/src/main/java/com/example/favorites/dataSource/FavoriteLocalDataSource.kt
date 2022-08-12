@@ -4,14 +4,19 @@ import com.example.favorites.dao.FavoriteDao
 import com.example.favorites.dao.TYPE_CAT
 import com.example.favorites.dao.TYPE_DOG
 import com.example.favorites.entity.Favorite
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FavoriteLocalDataSource(private val db: FavoriteDao): LocaleDataSource{
+class FavoriteLocalDataSource @Inject constructor(private val db: FavoriteDao) : LocaleDataSource {
 
-    private fun getFavoriteCars() = db.getFavoriteByType(TYPE_CAT)
+    fun getFavoriteCats() = db.getFavoriteByType(TYPE_CAT)
 
-    private fun getFavoriteDogs() = db.getFavoriteByType(TYPE_DOG)
+    fun getFavoriteDogs() = db.getFavoriteByType(TYPE_DOG)
+
+    fun getCountCats() = db.getCountByType(TYPE_CAT)
+
+    fun getCountDogs() = db.getCountByType(TYPE_DOG)
 
     suspend fun addFavorite(favorite: Favorite) {
         withContext(Dispatchers.IO) {
