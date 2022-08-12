@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -81,9 +80,9 @@ private fun PageDogsByBreed(
             it.breed == BREEDS[index]
         }
         if (list != null) {
-            items(list.dogsImages) {
-                DefaultImageView(it) {
-                    mainViewModel.addFavoriteCat(it, BREEDS[index])
+            items(list.items) {
+                DefaultImageView(it.imgUrl, it.isFavorite) {
+                    mainViewModel.addFavoriteCat(it.imgUrl, BREEDS[index])
                 }
             }
         } else {

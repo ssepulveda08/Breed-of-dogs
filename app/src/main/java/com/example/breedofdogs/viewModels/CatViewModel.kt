@@ -1,7 +1,6 @@
 package com.example.breedofdogs.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,15 +9,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.breedofdogs.newwork.models.BreedCat
 import com.example.breedofdogs.repositories.CatRepository
+import com.example.breedofdogs.ui.models.ItemImage
 import com.example.breedofdogs.ui.models.Queries
 import com.example.favorites.dao.TYPE_CAT
 import com.example.favorites.entity.Favorite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class CatViewModel @Inject constructor(
@@ -56,10 +53,20 @@ class CatViewModel @Inject constructor(
             repository.getImagesCatByBreed(breed).collect { values ->
                 val list: MutableList<Queries> = cacheQueries.toMutableList()
                 values.data?.let {
+                    val listItems = mutableListOf<ItemImage>()
+                    it.forEach { img ->
+                        val count = repository.getCountByUrl(img.url)
+                        listItems.add(
+                            ItemImage(
+                                img.url,
+                                count > 0
+                            )
+                        )
+                    }
                     list.add(
                         Queries(
                             breed,
-                            it.map { img -> img.url }
+                            listItems
                         )
                     )
                 }
@@ -70,6 +77,11 @@ class CatViewModel @Inject constructor(
 
     fun addFavoriteCat(img: String, breed: String) {
         viewModelScope.launch {
+            cacheQueries.firstOrNull { it.breed == breed }?.items?.firstOrNull {
+                it.imgUrl == img
+            }?.apply {
+                isFavorite = true
+            }
             repository.addFavoriteCat(
                 Favorite(
                     id = 0,

@@ -30,7 +30,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 
 @Composable
-fun DefaultImageView(url: String, addFavorite: () -> Unit = {}) {
+fun DefaultImageView(
+    url: String,
+    favorite: Boolean = false,
+    addFavorite: () -> Unit = {}
+) {
     Card(
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp),
@@ -61,7 +65,7 @@ fun DefaultImageView(url: String, addFavorite: () -> Unit = {}) {
                     .background(Color.Black)
                     .fillMaxWidth()
             ) {
-                val isFavorite = remember { mutableStateOf(false) }
+                val isFavorite = remember { mutableStateOf(favorite) }
                 IconButton(
                     onClick = {
                         isFavorite.value = true

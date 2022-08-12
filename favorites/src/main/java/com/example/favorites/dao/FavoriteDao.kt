@@ -24,6 +24,9 @@ interface FavoriteDao {
     @Query("SELECT COUNT(id) FROM favorite WHERE type= :type")
     fun getCountByType(type: String): LiveData<Int>
 
+    @Query("SELECT COUNT(id) FROM favorite WHERE url= :url")
+    fun getCountByUrl(url: String): Int
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(favorites: List<Favorite>)
 

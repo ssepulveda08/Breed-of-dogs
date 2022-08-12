@@ -33,6 +33,8 @@ class CatRepository @Inject constructor(
 
     fun countFavorite() = dataSource.getCountCats()
 
+    suspend fun getCountByUrl(url: String) = dataSource.getCountByUrl(url)
+
     fun getFavorite() = dataSource.getFavoriteCats()
 
     suspend fun addFavoriteCat(favorite: Favorite) {

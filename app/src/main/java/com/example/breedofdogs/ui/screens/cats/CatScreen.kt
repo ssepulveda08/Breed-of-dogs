@@ -83,10 +83,10 @@ private fun PageCatsByBreed(
             it.breed == viewModel.breeds[index].id
         }
         if (list != null) {
-            items(list.dogsImages) {
-                DefaultImageView(it){
+            items(list.items) {
+                DefaultImageView(it.imgUrl, it.isFavorite){
                     viewModel.addFavoriteCat(
-                        it,
+                        it.imgUrl,
                         viewModel.breeds[index].name
                     )
                 }

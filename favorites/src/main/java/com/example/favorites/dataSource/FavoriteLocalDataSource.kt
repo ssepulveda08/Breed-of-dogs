@@ -18,6 +18,10 @@ class FavoriteLocalDataSource @Inject constructor(private val db: FavoriteDao) :
 
     fun getCountDogs() = db.getCountByType(TYPE_DOG)
 
+    suspend fun getCountByUrl(url: String):Int = withContext(Dispatchers.IO) {
+        db.getCountByUrl(url)
+    }
+
     suspend fun addFavorite(favorite: Favorite) {
         withContext(Dispatchers.IO) {
             db.insert(listOf(favorite))

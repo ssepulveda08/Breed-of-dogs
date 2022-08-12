@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.breedofdogs.repositories.DogRepository
-import com.example.breedofdogs.ui.BREEDS
+import com.example.breedofdogs.ui.models.ItemImage
 import com.example.breedofdogs.ui.models.Queries
 import com.example.favorites.dao.TYPE_DOG
 import com.example.favorites.entity.Favorite
@@ -24,10 +24,6 @@ class MainViewModel @Inject constructor(
 
     var cacheQueries by mutableStateOf<List<Queries>>(listOf())
 
-    init {
-        fetchDogsByBreed(BREEDS[0])
-    }
-
     fun updateBreeds(breed: String) {
         viewModelScope.launch {
             fetchDogsByBreed(breed)
@@ -40,10 +36,20 @@ class MainViewModel @Inject constructor(
             repository.getDogsByBreed(breed).collect { values ->
                 val list: MutableList<Queries> = cacheQueries.toMutableList()
                 values.data?.message?.let {
+                    val listItems = mutableListOf<ItemImage>()
+                    it.forEach { img ->
+                        val count = repository.getCountByUrl(img)
+                        listItems.add(
+                            ItemImage(
+                                img,
+                                count > 0
+                            )
+                        )
+                    }
                     list.add(
                         Queries(
                             breed,
-                            it
+                            listItems
                         )
                     )
                 }
@@ -54,6 +60,11 @@ class MainViewModel @Inject constructor(
 
     fun addFavoriteCat(img: String, breed: String) {
         viewModelScope.launch {
+            cacheQueries.firstOrNull { it.breed == breed }?.items?.firstOrNull {
+                it.imgUrl == img
+            }?.apply {
+                isFavorite = true
+            }
             repository.addFavoriteDog(
                 Favorite(
                     id = 0,
