@@ -47,6 +47,7 @@ fun DefaultToolBarView(
     title: String,
     navController: NavHostController? = null,
     countFavorites: State<Int>? = null,
+    onClickFavorite: () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -85,38 +86,41 @@ fun DefaultToolBarView(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 var defaultCount = countFavorites?.value ?: 0
-                Text(
-                    text = if (defaultCount > 99) {
-                        "+99"
-                    } else defaultCount.toString(),
-                    modifier = Modifier
-                        .constrainAs(count) {
-                            top.linkTo(favorites.top)
-                            bottom.linkTo(favorites.bottom)
-                            end.linkTo(favorites.start)
-                        }
-                        .padding(0.dp),
-                    color = Color.White,
-                    textAlign = TextAlign.End,
-                    fontSize = 10.sp,
-                )
 
-                IconButton(
-                    modifier = Modifier
-                        .constrainAs(favorites) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                            end.linkTo(parent.end, 16.dp)
-                        }
-                        .padding(0.dp),
-                    onClick = { }
-                ) {
-                    Icon(
-                        modifier = Modifier.padding(0.dp),
-                        imageVector = if (defaultCount > 0) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "favorites",
-                        tint = Color.Red
+                if (countFavorites != null) {
+                    Text(
+                        text = if (defaultCount > 99) {
+                            "+99"
+                        } else defaultCount.toString(),
+                        modifier = Modifier
+                            .constrainAs(count) {
+                                top.linkTo(favorites.top)
+                                bottom.linkTo(favorites.bottom)
+                                end.linkTo(favorites.start)
+                            }
+                            .padding(0.dp),
+                        color = Color.White,
+                        textAlign = TextAlign.End,
+                        fontSize = 10.sp,
                     )
+
+                    IconButton(
+                        modifier = Modifier
+                            .constrainAs(favorites) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                end.linkTo(parent.end, 16.dp)
+                            }
+                            .padding(0.dp),
+                        onClick = onClickFavorite
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(0.dp),
+                            imageVector = if (defaultCount > 0) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = "favorites",
+                            tint = Color.Red
+                        )
+                    }
                 }
             }
         }

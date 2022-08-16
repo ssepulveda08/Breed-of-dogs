@@ -31,7 +31,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun CatsContainer(viewModel: CatViewModel = viewModel(), navController: NavHostController? = null) {
     val countFavorites: State<Int> = viewModel.onCountFavorites.observeAsState(0)
-    DefaultToolBarView("Cat breeds", navController, countFavorites) {
+    DefaultToolBarView(
+        "Cat breeds",
+        navController,
+        countFavorites,
+        onClickFavorite = {
+            navController?.navigate("FavoriteCats")
+        }
+    ) {
         if (viewModel.breeds.isNotEmpty()) {
             CombinedTab(viewModel)
         }

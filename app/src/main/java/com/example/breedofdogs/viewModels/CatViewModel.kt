@@ -25,6 +25,8 @@ class CatViewModel @Inject constructor(
 
     var cacheQueries by mutableStateOf<List<Queries>>(listOf())
 
+    var favorites by mutableStateOf<List<Favorite>>(listOf())
+
     var breeds by mutableStateOf<List<BreedCat>>(listOf())
 
     init {
@@ -90,6 +92,14 @@ class CatViewModel @Inject constructor(
                     breed = breed
                 )
             )
+        }
+    }
+
+    fun getFavoriteCats() = viewModelScope.launch {
+        repository.getFavorite().collect {
+            if (it != null) {
+                favorites = it
+            }
         }
     }
 

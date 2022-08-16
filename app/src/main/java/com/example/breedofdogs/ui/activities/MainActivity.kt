@@ -16,7 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.breedofdogs.ui.screens.HomeSelectionItem
 import com.example.breedofdogs.ui.screens.cats.CatsContainer
+import com.example.breedofdogs.ui.screens.cats.FavoriteScreenCats
 import com.example.breedofdogs.ui.screens.dogs.DogsContainer
+import com.example.breedofdogs.ui.screens.dogs.FavoriteScreenDogs
 import com.example.breedofdogs.ui.theme.Black
 import com.example.breedofdogs.ui.theme.BreedOfDogsTheme
 import com.example.breedofdogs.viewModels.CatViewModel
@@ -44,7 +46,9 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "HomeSelection") {
                          composable("HomeSelection") { HomeSelectionItem(navController) }
                          composable("Dogs") { DogsContainer(mainViewModel, navController) }
+                         composable("FavoriteDogs") { FavoriteScreenDogs(mainViewModel, navController) }
                          composable("Cats") { CatsContainer(catViewModel, navController) }
+                        composable("FavoriteCats") { FavoriteScreenCats(catViewModel, navController) }
                     }
                 }
             }

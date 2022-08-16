@@ -27,6 +27,8 @@ class DogRepository @Inject constructor(
 
     fun countFavorite() = dataSource.getCountDogs()
 
+    fun getFavoriteDogs() = dataSource.getFavoriteDogs()
+
     suspend fun getCountByUrl(url: String) = dataSource.getCountByUrl(url)
 
     suspend fun addFavoriteDog(favorite: Favorite) {

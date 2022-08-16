@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.favorites.entity.Favorite
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 const val TYPE_CAT = "CAT"
@@ -19,7 +20,7 @@ interface FavoriteDao {
     fun getAll(): List<Favorite>
 
     @Query("SELECT * FROM favorite WHERE type= :type")
-    fun getFavoriteByType(type: String): List<Favorite>
+    fun getFavoriteByType(type: String): Flow<List<Favorite>?>
 
     @Query("SELECT COUNT(id) FROM favorite WHERE type= :type")
     fun getCountByType(type: String): LiveData<Int>

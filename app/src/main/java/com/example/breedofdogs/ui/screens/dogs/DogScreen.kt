@@ -31,7 +31,14 @@ fun DogsContainer(
     navController: NavHostController? = null
 ) {
     val countFavorites: State<Int> = mainViewModel.onCountFavorite.observeAsState(0)
-    DefaultToolBarView("Dogs breeds", navController, countFavorites) {
+    DefaultToolBarView(
+        "Dogs breeds",
+        navController,
+        countFavorites,
+        onClickFavorite = {
+            navController?.navigate("FavoriteDogs")
+        }
+    ) {
         CombinedTab(mainViewModel)
     }
 }

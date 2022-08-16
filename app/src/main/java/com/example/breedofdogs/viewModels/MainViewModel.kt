@@ -24,6 +24,8 @@ class MainViewModel @Inject constructor(
 
     var cacheQueries by mutableStateOf<List<Queries>>(listOf())
 
+    var favorites by mutableStateOf<List<Favorite>>(listOf())
+
     fun updateBreeds(breed: String) {
         viewModelScope.launch {
             fetchDogsByBreed(breed)
@@ -73,6 +75,14 @@ class MainViewModel @Inject constructor(
                     breed = breed
                 )
             )
+        }
+    }
+
+    fun getFavoriteDogs() = viewModelScope.launch {
+        repository.getFavoriteDogs().collect {
+            if (it != null ) {
+                favorites = it
+            }
         }
     }
 
